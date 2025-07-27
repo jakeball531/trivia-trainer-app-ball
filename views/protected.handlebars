@@ -60,7 +60,7 @@
 
   //OpenTrivia returns encoded characters when called, this decodes them
   function decodeHTMLEntities(text) {
-    const txt = document.createElement("textdecode");
+    const txt = document.createElement("textarea");
     txt.innerHTML = text;
     return txt.value;
   }
