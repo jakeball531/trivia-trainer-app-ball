@@ -11,5 +11,5 @@ CREATE TABLE scores (
   user_id INT,
   category_id INT,
   correct INT,
-  wrong INT,
+  wrong INT
 );
