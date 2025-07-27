@@ -1,0 +1,14 @@
+<header>
+  <nav>
+    <a href="/">Trivia Trainer App</a>
+    <a href="/private">Quiz</a>
+    
+    {{#if isLoggedIn}}
+      <a href="/api/logout">Logout</a>
+    
+    {{else}}
+      <a href="/login">Login</a>
+      <a href="/signup">Signup</a>
+    {{/if}}
+  </nav>
+</header>

@@ -1,0 +1,176 @@
+{{> header}}
+<main>
+  <h1>Trivia Quiz</h1>
+
+  {{! quiz section}}
+
+  <section>
+    <label for="category">Choose a topic:</label>
+    <select id="category">
+      <option value="9">General Knowledge</option>
+      <option value="17">Science & Nature</option>
+      <option value="25">Art</option>
+      <option value="23">History</option>
+      <option value="22">Geography</option>
+      <option value="21">Sports</option>
+    </select>
+    <button onclick="startQuiz()">Start Quiz</button>
+    <div id="quiz-container"></div>
+  </section>
+
+  <hr>
+
+  {{! history section, builds the lifetime score table once a completed quiz is logged 
+  requires initial reload to populate after first quiz completion, not sure why}}
+
+  <section id="history">
+    <h2>Your Score History</h2>
+
+    {{#if history.length}}
+      <table>
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th>Attempts</th>
+            <th>Correct</th>
+            <th>Wrong</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each history}}
+            <tr>
+              <td>{{this.name}}</td>
+              <td>{{this.attempts}}</td>
+              <td>{{this.total_correct}}</td>
+              <td>{{this.total_wrong}}</td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+
+    {{else}}
+      <p>No quiz attempts recorded yet.</p>
+    {{/if}}
+  </section>
+</main>
+
+{{!  runs the quiz script}}
+
+<script>
+  let currentQuestionIndex = 0;
+  let score = { correct: 0, wrong: 0 };
+  let questions = [];
+  let selectedCategory = '';
+
+  function startQuiz() {
+  selectedCategory = document.getElementById("category").value;
+  
+  fetch(`https://opentdb.com/api.php?amount=10&category=${selectedCategory}&type=multiple`)
+    .then(res => res.json())
+
+    .then(data => {
+      questions = data.results;
+      currentQuestionIndex = 0;
+      score = { correct: 0, wrong: 0 };
+      showQuestion();
+    })
+
+    .catch(err => {
+      console.error('Cant start quiz', err);
+    });
+  }
+
+  //function that mixes up the order of the answers
+  //otherwise correct answer would be in the same place every time
+
+  function mixAnswers(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]]; 
+    }
+
+    return array;
+  }
+
+  //pulls the question and uses the mixAnswers function
+
+  function showQuestion() {
+    const questionObj = questions[currentQuestionIndex];
+    const container = document.getElementById('quiz-container');
+  
+    const answers = mixAnswers([...questionObj.incorrect_answers, questionObj.correct_answer]);
+
+    container.innerHTML = 
+      `<h2>${decodeHTMLEntities(questionObj.question)}</h2>
+      ${answers.map(ans => `<button onclick="submitAnswer('${ans}')">${decodeHTMLEntities(ans)}</button>`).join('<br>')}`;
+  }
+
+  function submitAnswer(answer) {
+    const correct = questions[currentQuestionIndex].correct_answer;
+    if (answer === correct) score.correct++;
+
+    else score.wrong++;
+
+    currentQuestionIndex++;
+
+    if (currentQuestionIndex < questions.length) showQuestion();
+
+    else endQuiz();
+  }
+
+  //ends quiz and calls updateHistory to update the lifetime score table
+  //requires an initial reload after completing the first quiz to populate the table
+  //once the first reload happens the table will automatically update after each quiz without reloading
+  //couldnt figure out why it requires the reload at frist..
+
+  function endQuiz() {
+    document.getElementById('quiz-container').innerHTML = 
+      `<h2>Quiz Finished</h2>
+      <p>Correct: ${score.correct}</p>
+      <p>Incorrect: ${score.wrong}</p>`;
+
+    fetch('/api/score', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        category_id: selectedCategory,
+        correct: score.correct,
+        wrong: score.wrong
+      })
+    })
+
+    .then(() => {
+      updateHistory();
+    })
+
+    .catch(err => {
+      console.error('Cant save score', err);
+    });
+  }
+
+  //updates score history 
+
+  function updateHistory() {
+    fetch('/api/score/history')
+
+    .then(res => res.json())
+
+    .then(history => {
+      const tbody = document.querySelector('#history tbody');
+      if (!tbody) return;
+
+      tbody.innerHTML = history.map(item => 
+        `<tr>
+          <td>${item.name}</td>
+          <td>${item.attempts}</td>
+          <td>${item.total_correct}</td>
+          <td>${item.total_wrong}</td>
+        </tr>`).join('');
+    })
+    
+    .catch(err => {
+      console.error('Cant pull history', err);
+    });
+  }
+
+</script>

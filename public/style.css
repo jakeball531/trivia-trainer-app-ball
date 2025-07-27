@@ -1,0 +1,143 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #1e1e1e;
+  color: #ffffff;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  line-height: 1.6;
+  padding: 20px;
+}
+
+h1, h2, h3, h4 {
+  color: #ffffff;
+  margin-bottom: 0.5em;
+}
+
+a {
+  color: #ffffff;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: #bbbbbb;
+}
+
+button {
+  background-color: #444444;
+  color: #ffffff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #666666;
+}
+
+main, section {
+  margin: 20px auto;
+  padding: 20px;
+  background: #2c2c2c;
+  border-radius: 10px;
+  max-width: 1000px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.5);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+th, td {
+  padding: 10px;
+  border: 1px solid #444;
+  text-align: left;
+}
+
+th {
+  background-color: #333;
+  color: #ffffff;
+}
+
+header {
+  background: #2c2c2c;
+  padding: 10px 20px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 20px;
+}
+
+header a:first-of-type {
+  margin-right: auto;
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+header nav a {
+  margin-left: 20px;
+  color: #ffffff;
+}
+
+header nav a:hover {
+  color: #bbbbbb;
+}
+
+@media (max-width: 768px) {
+
+  table, thead, tbody, th, td, tr {
+    display: block;
+    width: 100%;
+  }
+
+  tr {
+    margin-bottom: 10px;
+    border: 1px solid #444;
+    padding: 10px;
+    border-radius: 5px;
+  }
+
+  th, td {
+    text-align: left;
+    padding: 5px 0;
+  }
+
+  th {
+    background: none;
+    color: #ffffff;
+    font-weight: bold;
+  }
+}
+
+
+@media (max-width: 600px) {
+
+  body {
+    padding: 10px;
+  }
+
+  main, section {
+    padding: 15px;
+  }
+
+  h1 {
+    font-size: 1.8em;
+  }
+
+  button {
+    width: 100%;
+    padding: 12px;
+    font-size: 1.1em;
+  }
+}

@@ -1,0 +1,11 @@
+{{> header}}
+<main>
+  <h1>Welcome to Trivia Trainer</h1>
+  
+  {{#if isLoggedIn}}
+    <p>You’re logged in! Go to the <a href="/private">quiz page</a>.</p>
+
+  {{else}}
+    <p>Please <a href="/login">login</a> or <a href="/signup">sign up</a> to play quizzes.</p>
+  {{/if}}
+</main>
