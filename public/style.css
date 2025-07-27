@@ -74,13 +74,10 @@ header {
   margin-bottom: 20px;
   border-radius: 5px;
   display: flex;
+  justify-content: flex-end;
   justify-content: space-between;
   align-items: center;
   gap: 20px;
-}
-
-header nav {
-  display: flex;
 }
 
 header a:first-of-type {
@@ -90,6 +87,7 @@ header a:first-of-type {
 }
 
 header nav a {
+  margin-left: 20px;
   color: #ffffff;
 }
 
