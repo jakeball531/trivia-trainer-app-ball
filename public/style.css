@@ -79,6 +79,10 @@ header {
   gap: 20px;
 }
 
+header nav {
+  display: flex;
+}
+
 header a:first-of-type {
   font-weight: bold;
   font-size: 1.2em;
