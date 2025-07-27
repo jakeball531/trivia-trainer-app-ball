@@ -57,6 +57,14 @@
 {{!  runs the quiz script}}
 
 <script>
+
+  //OpenTrivia returns encoded characters when called, this decodes them
+  function decodeHTMLEntities(text) {
+    const txt = document.createElement("textdecode");
+    txt.innerHTML = text;
+    return txt.value;
+  }
+
   let currentQuestionIndex = 0;
   let score = { correct: 0, wrong: 0 };
   let questions = [];
